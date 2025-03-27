@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-from skimage.morphology import h_minima
 
 def show_image(window_name, frame):
     cv2.imshow(window_name, frame)
