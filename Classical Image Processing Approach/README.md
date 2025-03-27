@@ -1,43 +1,45 @@
 # Trout Egg Detection and Counting
 
-This project demonstrates a classical computer vision approach to detect and count trout eggs in an image. The process involves several steps to segment and accurately count the eggs, even when they overlap.
+## Task
+
+This project showcases my approach to detecting and counting trout eggs using classical computer vision techniques. The goal was to accurately segment and count the eggs, even in cases where they overlap.
 
 ## Overview
 
-The image features uniform lighting and background; however, slight variations in BGR values occur due to shadows or reflections. To mitigate these variations, the image is converted to the HSV color space, allowing segmentation based on the eggs' orange hue.
+The image features a uniform background and lighting, but slight variations in BGR values occur due to shadows and reflections. To handle these variations, I converted the image to the HSV color space, making it easier to segment based on the eggs' orange hue.
 
 ## Solution Process
 
-The segmentation result serves as a mask for the eggs. Initially, a straightforward contour detection on the mask would merge overlapping eggs into a single large blob. To address this, the following steps were implemented:
+The segmentation result served as a mask for the eggs. Initially, a simple contour detection on the mask merged overlapping eggs into large blobs, so I needed a better strategy. Here's how I solved it:
 
 1. **Distance Transform:**  
-   The distance transform method was applied to locate the centers of the eggs, even when they overlap.
+   I applied a distance transform to locate the centers of the eggs, even when they overlapped.
 
 2. **Thresholding:**  
-   After detecting the centers, thresholding was applied to mark each egg's center in white while turning the rest of the image black. The threshold value of 0.28 was determined through multiple rounds of hyperparameter tuning.
+   Once I detected the centers, I applied thresholding to mark each egg’s center in white while keeping the rest of the image black. After tuning the hyper parameters, I settled on a threshold value of 0.28.
 
 3. **Morphological Operations:**  
-   The thresholded image exhibited some distortions, which were corrected by applying a chain of morphological operations. The specific sequence of these operations was finalized after extensive experimentation.
+   The resulting thresholded image had distortions, so I used a series of morphological operations to refine the segmentation. I finalized the exact sequence after extensive experimentation.
 
 4. **Watershed Segmentation:**  
-   Once the centers were clearly defined, they were used as markers for the watershed algorithm. The watershed algorithm separates overlapping objects by "flooding" regions based on distance information. The output is a modified markers array where:
+   With clearly defined centers, I used them as markers for the watershed algorithm. The algorithm helped separate overlapping objects by “flooding” regions based on distance information. The resulting markers array contained:
 
-   - **0** represents background pixels
-   - **1** represents border pixels
-   - **2, 3, 4, ...** represent the egg objects
+   - **0** for background pixels
+   - **1** for border pixels
+   - **2, 3, 4, ...** for individual egg objects
 
 5. **Contour Detection for Counting:**  
-   A black canvas of the same size as the mask image was created. Every pixel corresponding to a border or object (as determined by the modified markers array) was converted to white. Finally, contour detection was applied to segment the individual objects, and the total number of contours detected corresponds to the egg count.
+   I created a black canvas matching the mask image size. Every pixel corresponding to a border or object (from the modified markers array) was converted to white. Finally, I ran contour detection to segment individual eggs and counted the total contours.
 
 ## Results
 
 - **Total Egg Count:** 103
 
-## Further Enhancement
+## Further Refinements
 
-A minor issue remains: in the bottom-right side of the image, two markers remain connected, causing them to be counted as a single egg. Efforts to reduce this joint connection resulted in some other corner egg markers being ignored.
+There’s one remaining issue: in the bottom-right of the image, two markers are still connected, leading to a miscount. Attempts to fix this caused some corner eggs to be ignored. Further refinements could help separate these eggs without losing accuracy elsewhere.
 
 ## Tools and Libraries Used
 
-- **OpenCV:** Used for image reading, color space conversion, thresholding, morphological transformations, and watershed segmentation.
-- **NumPy:** Supports efficient numerical operations on image data.
+- **OpenCV:** For image processing, color conversion, thresholding, morphological transformations, and watershed segmentation.
+- **NumPy:** For efficient numerical operations on image data.
