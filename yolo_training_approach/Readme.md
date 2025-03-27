@@ -1,8 +1,8 @@
-# Trout Egg Detection Using YOLO
+# Trout Egg Detection and Couting Using YOLO
 
 ## Task
 
-Detect and count trout eggs in a given image using a classical computer vision approach.
+Detect and count trout eggs in a given image using a deep learning based computer vision approach.
 
 ## Solution Process
 
