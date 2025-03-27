@@ -1,24 +1,6 @@
 import cv2
 import numpy as np
 
-def show_image(window_name, frame):
-    cv2.imshow(window_name, frame)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-
-def show_images_side_by_side(img1, img2, window_name="Comparison"):
-    if len(img1.shape) == 2:
-        img1 = cv2.cvtColor(img1, cv2.COLOR_GRAY2BGR)
-    if len(img2.shape) == 2:
-        img2 = cv2.cvtColor(img2, cv2.COLOR_GRAY2BGR)
-    height = min(img1.shape[0], img2.shape[0])
-    img1 = cv2.resize(img1, (int(img1.shape[1] * (height / img1.shape[0])), height))
-    img2 = cv2.resize(img2, (int(img2.shape[1] * (height / img2.shape[0])), height))
-    side_by_side = np.hstack((img1, img2))
-    cv2.imshow(window_name, side_by_side)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-
 def main():
     image = cv2.imread("trout_egg.jpg")
     original = image.copy()
@@ -35,7 +17,7 @@ def main():
     sure_foreground = cv2.morphologyEx(sure_foreground, cv2.MORPH_ERODE, None, iterations=2)
     sure_foreground = cv2.morphologyEx(sure_foreground, cv2.MORPH_DILATE, None, iterations=1)
     sure_foreground = np.uint8(sure_foreground)
-    num_markers, markers = cv2.connectedComponents(sure_foreground)
+    _, markers = cv2.connectedComponents(sure_foreground)
     markers = markers + 1
     markers[mask == 0] = 0
     cv2.watershed(image, markers)
@@ -48,11 +30,13 @@ def main():
         center = (int(x), int(y))
         radius = int(radius)
         cv2.circle(original, center, radius, (0, 255, 0), 2)
-        cv2.putText(original, str(i+1), (center[0]-10, center[1]-10),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
+        cv2.putText(original, str(i+1), (center[0]-10, center[1]-10),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
+    
     print(f"Total number of eggs detected: {egg_count}")
-    show_images_side_by_side(dist_transform, segmented, "Distance Transform vs. Segmented")
-    show_images_side_by_side(segmented, original, "Segmented vs. Final Result")
+    cv2.imwrite("results/1.mask.png",mask)
+    cv2.imwrite("results/2.segmented.png",segmented)
+    cv2.imwrite("results/3.final_result.png",original)
+    
 
 if __name__ == "__main__":
     main()
