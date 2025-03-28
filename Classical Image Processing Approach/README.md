@@ -5,13 +5,13 @@
 Given a single image: a set of trout eggs placed on a white tray, alongside a coin and a ruler for reference, my goal is to detect and count all the eggs in the image
 
 ## Overview
-
-The image features a uniform background and lighting, but slight variations in BGR values occur due to shadows and reflections. To handle these variations, I converted the image to the HSV color space, making it easier to segment based on the eggs' orange hue.
+In this project, I used classical & deeplearning based computer vision techniques to detect and count trout eggs in the given image. The main challenge was segmenting the eggs accurately, especially in cases of closely situated eggs. 
 
 ## Solution Process
 
 The segmentation result served as a mask for the eggs. Initially, a simple contour detection on the mask merged overlapping eggs into large blobs, so I needed a better strategy. Here's how I solved it:
-
+1. **Image Conversion & Mask Creation** 
+The image features a uniform background and lighting, but slight variations in BGR values occur due to shadows and reflections. To handle these variations, I converted the image to the HSV color space, making it easier to segment based on the eggs' orange hue.
 1. **Distance Transform:**  
    I applied a distance transform to locate the centers of the eggs, even when they overlapped.
 
