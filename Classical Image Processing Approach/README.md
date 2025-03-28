@@ -2,7 +2,7 @@
 
 ## Task
 
-This project showcases my approach to detecting and counting trout eggs using classical computer vision techniques. The goal was to accurately segment and count the eggs, even in cases where they overlap.
+Given a single image: a set of trout eggs placed on a white tray, alongside a coin and a ruler for reference, my goal is to detect and count all the eggs in the image
 
 ## Overview
 
