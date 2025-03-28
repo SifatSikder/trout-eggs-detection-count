@@ -9,9 +9,8 @@ In this project, I used classical & deeplearning based computer vision technique
 
 ## Solution Process
 
-The segmentation result served as a mask for the eggs. Initially, a simple contour detection on the mask merged overlapping eggs into large blobs, so I needed a better strategy. Here's how I solved it:
 1. **Image Conversion & Mask Creation:**  
-The image features a uniform background and lighting, but slight variations in BGR values occur due to shadows and reflections. To handle these variations, I converted the image to the HSV color space, making it easier to segment based on the eggs' orange hue.
+The image features a uniform background and lighting, but slight variations in BGR values occur due to shadows and reflections. To handle these variations, I converted the image to the HSV color space, making it easier to segment based on the eggs' orange hue. The segmentation result served as a mask for the eggs. Initially, a simple contour detection on the mask merged overlapping eggs into large blobs, so I needed a better strategy.
 
 2. **Distance Transform:**  
    I applied a distance transform to locate the centers of the eggs, even when they overlapped.
